@@ -1479,7 +1479,7 @@ footer {
 
       <div class="cart-actions">
         <button class="add-to-cart-btn" id="addToCartBtn"><span>Add to Cart</span></button>
-        <a class="checkout-btn" id="shopifyBtn" href="https://undicibrand.com/products/the-undici-heavyweight-boxy-tee" target="_blank"><span>Buy Now — $45</span></a>
+        <a class="checkout-btn" id="shopifyBtn" href="https://bu4f1a-ng.myshopify.com/products/the-undici-heavyweight-boxy-tee" target="_blank"><span>Buy Now — $45</span></a>
       </div>
       <div class="preorder-note">Limited quantities · No restock · Closes March 19th</div>
 
@@ -1785,7 +1785,7 @@ function updateCheckoutLink() {
   qtyNumEl.textContent = qty;
   const variantId = variantMap[selectedColor]?.[selectedSize];
   if (variantId) {
-    shopifyBtn.href = `https://undicibrand.com/cart/${variantId}:${qty}`;
+    shopifyBtn.href = `https://bu4f1a-ng.myshopify.com/cart/${variantId}:${qty}`;
     shopifyBtn.querySelector('span').textContent = `Pre-order Now — $45`;
     shopifyBtn.style.opacity = '1';
     shopifyBtn.style.pointerEvents = 'auto';
