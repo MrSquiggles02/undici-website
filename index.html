@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>undici — ascend to the eleventh realm</title>
+<link rel="preload" href="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/ED-Manteca-Black-Regular.otf?v=1772257356" as="font" type="font/otf" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+/* Hide Shopify theme chrome */
+#shopify-section-header,
+header.site-header,
+.site-header,
+#MainContent > *:not(#shopify-section-undici),
+footer.site-footer,
+.site-footer,
+#shopify-section-footer,
+.footer,
+header[role="banner"],
+nav.main-nav,
+.announcement-bar,
+.skip-to-content,
+#shopify-announcements,
+.cart-notification,
+body > header,
+body > footer,
+body > nav {
+  display: none !important;
+}
+
+/* Remove Shopify body padding */
+body {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+main#MainContent {
+  padding: 0 !important;
+  margin: 0 !important;
+  min-height: unset !important;
+}
+
+@font-face {
+  font-family: 'EDManteca';
+  src: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/ED-Manteca-Black-Regular.otf?v=1772257356') format('opentype'),
+       url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/ED-Manteca-Black-Regular.otf?v=1772257356') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* Shopify theme overrides */
+.shopify-section { margin: 0 !important; padding: 0 !important; }
+main#MainContent, .main-page-content, #main-content { 
+  padding: 0 !important; 
+  margin: 0 !important; 
+}
+body { cursor: none !important; }
+
+/* QUANTITY SELECTOR */
+.qty-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 28px;
+  width: fit-content;
+  border: 1px solid var(--border);
+}
+
+.qty-btn {
+  width: 48px;
+  height: 48px;
+  background: none;
+  border: none;
+  color: var(--gold);
+  font-size: 1.4rem;
+  cursor: none;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'DM Mono', monospace;
+}
+.qty-btn:hover {
+  background: var(--gold);
+  color: var(--black);
+}
+
+.qty-num {
+  min-width: 52px;
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  color: var(--white);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  padding: 10px 0;
+  letter-spacing: 0.1em;
+  user-select: none;
+}
+
+/* CART ACTIONS */
+.cart-actions { display: flex; gap: 12px; margin-bottom: 16px; }
+.add-to-cart-btn { flex: 1; padding: 18px 24px; background: var(--gold); color: var(--black); border: none; font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.15em; cursor: none; transition: all 0.2s; }
+.add-to-cart-btn:hover { background: var(--white); }
+.checkout-btn { flex: 1; padding: 18px 24px; background: transparent; color: var(--white); border: 1px solid var(--border); font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.15em; cursor: none; transition: all 0.2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+.checkout-btn:hover { border-color: var(--gold); color: var(--gold); }
+.cart-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.cart-overlay.open { opacity: 1; pointer-events: auto; }
+.cart-drawer { position: fixed; top: 0; right: -420px; width: 420px; max-width: 100vw; height: 100vh; background: #0f0d0a; border-left: 1px solid var(--border); z-index: 1001; display: flex; flex-direction: column; transition: right 0.35s cubic-bezier(0.4,0,0.2,1); }
+.cart-drawer.open { right: 0; }
+.cart-drawer-header { display: flex; align-items: center; justify-content: space-between; padding: 24px; border-bottom: 1px solid var(--border); }
+.cart-drawer-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.15em; color: var(--white); }
+.cart-close { background: none; border: none; color: var(--gold); font-size: 1.2rem; cursor: none; padding: 4px 8px; }
+.cart-items { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.cart-item { display: grid; grid-template-columns: 80px 1fr auto; gap: 14px; align-items: center; border: 1px solid var(--border); padding: 12px; }
+.cart-item-img { width: 80px; height: 80px; object-fit: cover; object-position: top; }
+.cart-item-info { display: flex; flex-direction: column; gap: 4px; }
+.cart-item-name { font-family: 'EDManteca', serif; font-size: 1rem; color: var(--white); }
+.cart-item-meta { font-size: 0.65rem; letter-spacing: 0.15em; color: rgba(240,235,224,0.4); text-transform: uppercase; }
+.cart-item-qty { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.cart-item-qty button { width: 24px; height: 24px; background: none; border: 1px solid var(--border); color: var(--gold); font-size: 0.9rem; cursor: none; display: flex; align-items: center; justify-content: center; }
+.cart-item-qty button:hover { background: var(--gold); color: var(--black); }
+.cart-item-qty span { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; color: var(--white); min-width: 20px; text-align: center; }
+.cart-item-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--gold); }
+.cart-item-remove { background: none; border: none; color: rgba(240,235,224,0.3); font-size: 0.8rem; cursor: none; margin-top: 4px; display: block; }
+.cart-item-remove:hover { color: var(--red); }
+.cart-empty { text-align: center; color: rgba(240,235,224,0.3); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; margin: auto; padding: 40px 0; }
+.cart-drawer-footer { padding: 20px 24px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
+.cart-total-row { display: flex; justify-content: space-between; font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; color: var(--white); }
+.cart-checkout-btn { display: block; text-align: center; padding: 18px; background: var(--gold); color: var(--black); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.15em; text-decoration: none; transition: background 0.2s; }
+.cart-checkout-btn:hover { background: var(--white); }
+.cart-note { font-size: 0.6rem; letter-spacing: 0.15em; color: rgba(240,235,224,0.3); text-align: center; text-transform: uppercase; }
+
+.photo-gallery {
+  padding: 0 40px 120px;
+}
+
+.gallery-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.gallery-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: auto auto;
+  gap: 4px;
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  background: var(--grey);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+  filter: brightness(0.92);
+}
+
+.gallery-item:hover img {
+  transform: scale(1.04);
+  filter: brightness(1);
+}
+
+.gallery-wide {
+  grid-column: span 7;
+  aspect-ratio: 4/3;
+}
+
+.gallery-item:not(.gallery-wide):not(.gallery-tall) {
+  grid-column: span 5;
+  aspect-ratio: 4/3;
+}
+
+.gallery-item:nth-child(3) {
+  grid-column: span 7;
+  aspect-ratio: 16/9;
+}
+
+.gallery-tall {
+  grid-column: span 5;
+  grid-row: span 1;
+  aspect-ratio: 3/4;
+}
+
+.gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 16px 14px;
+  background: linear-gradient(to top, rgba(10,8,6,0.85) 0%, transparent 100%);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-item:hover .gallery-caption {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .photo-gallery { padding: 0 20px 80px; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; gap: 3px; }
+  .gallery-wide, .gallery-item:not(.gallery-wide):not(.gallery-tall), .gallery-item:nth-child(3), .gallery-tall {
+    grid-column: span 1;
+    aspect-ratio: 1/1;
+  }
+}
+
+
+/* CAROUSEL */
+.carousel-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: var(--grey);
+}
+
+.carousel-stage {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.carousel-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.carousel-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(10,8,6,0.7);
+  border: 1px solid var(--border);
+  color: var(--gold);
+  width: 40px;
+  height: 40px;
+  font-size: 1rem;
+  cursor: none;
+  z-index: 10;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.carousel-btn:hover {
+  background: var(--gold);
+  color: var(--black);
+}
+.carousel-prev { left: 12px; }
+.carousel-next { right: 12px; }
+
+.carousel-dots {
+  position: absolute;
+  bottom: 14px;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  z-index: 10;
+}
+
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  background: rgba(240,235,224,0.3);
+  border-radius: 50%;
+  cursor: none;
+  transition: background 0.2s, transform 0.2s;
+}
+.carousel-dot.active {
+  background: var(--gold);
+  transform: scale(1.3);
+}
+
+</style>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #0a0806;
+  --red: #8b0000;
+  --red-bright: #c0392b;
+  --gold: #c9922a;
+  --gold-light: #e8b84b;
+  --white: #f0ebe0;
+  --grey: #2a2520;
+  --border: rgba(201,146,42,0.25);
+  --cursor-size: 20px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'DM Mono', monospace;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+/* CUSTOM CURSOR */
+.cursor {
+  z-index: 2147483647 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: fixed;
+  width: var(--cursor-size);
+  height: var(--cursor-size);
+  border: 1px solid var(--gold);
+  border-radius: 0;
+  pointer-events: none;
+  z-index: 2147483647 !important;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: difference;
+}
+.cursor.hovered {
+  width: 50px;
+  height: 50px;
+  background: rgba(201,146,42,0.15);
+}
+.cursor-dot {
+  position: fixed;
+  width: 4px;
+  height: 4px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+}
+
+/* GRAIN */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.35;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,8,6,0.85);
+  backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+  font-family: 'EDManteca', cursive;
+  font-size: 1.8rem;
+  color: var(--white);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+.nav-cta {
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.nav-cta:hover {
+  background: var(--gold);
+  color: var(--black);
+}
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 70% at 65% 40%, rgba(139,0,0,0.4) 0%, transparent 70%),
+              radial-gradient(ellipse 40% 50% at 20% 80%, rgba(201,146,42,0.08) 0%, transparent 60%),
+              var(--black);
+}
+
+.hero-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.08) 2px,
+    rgba(0,0,0,0.08) 4px
+  );
+  pointer-events: none;
+}
+
+.hero-number {
+  position: absolute;
+  top: 50%;
+  right: -2vw;
+  transform: translateY(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(18rem, 30vw, 38rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(201,146,42,0.12);
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -0.05em;
+}
+
+.hero-eyebrow {
+  position: relative;
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 30px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.hero-title {
+  position: relative;
+  font-family: 'EDManteca', cursive;
+  font-size: clamp(5rem, 14vw, 14rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+}
+
+.hero-title .glitch {
+  position: relative;
+  display: inline-block;
+}
+.hero-title .glitch::before,
+.hero-title .glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  opacity: 0;
+}
+.hero-title .glitch::before {
+  color: var(--red-bright);
+  animation: glitch-1 4s infinite;
+  clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%);
+}
+.hero-title .glitch::after {
+  color: var(--gold);
+  animation: glitch-2 4s infinite;
+  clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+}
+
+@keyframes glitch-1 {
+  0%, 90%, 100% { opacity: 0; transform: translate(0); }
+  91% { opacity: 0.8; transform: translate(-4px, 0); }
+  93% { opacity: 0; transform: translate(0); }
+  95% { opacity: 0.6; transform: translate(3px, 0); }
+  97% { opacity: 0; }
+}
+@keyframes glitch-2 {
+  0%, 88%, 100% { opacity: 0; transform: translate(0); }
+  89% { opacity: 0.7; transform: translate(4px, 0); }
+  91% { opacity: 0; transform: translate(0); }
+  94% { opacity: 0.5; transform: translate(-2px, 0); }
+  96% { opacity: 0; }
+}
+
+.hero-sub {
+  position: relative;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.45);
+  max-width: 420px;
+  line-height: 1.8;
+  margin-bottom: 48px;
+}
+
+/* COUNTDOWN */
+.countdown-wrap {
+  position: relative;
+  margin-bottom: 36px;
+}
+
+.countdown-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.countdown-label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: var(--gold);
+}
+
+.countdown-blocks {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.countdown-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(201,146,42,0.06);
+  border: 1px solid var(--border);
+  padding: 12px 18px;
+  min-width: 72px;
+}
+
+.countdown-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.8rem;
+  line-height: 1;
+  color: var(--white);
+  letter-spacing: 0.05em;
+  transition: color 0.3s;
+}
+
+.countdown-num.flash { color: var(--gold); }
+
+.countdown-unit {
+  font-size: 0.52rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.35);
+  margin-top: 4px;
+}
+
+.countdown-sep {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  color: var(--gold);
+  opacity: 0.4;
+  margin-bottom: 16px;
+}
+
+.countdown-expired {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.15em;
+  color: var(--red);
+}
+
+.hero-actions {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 16px 40px;
+  background: var(--red);
+  color: var(--white);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: translateX(-101%);
+  transition: transform 0.3s ease;
+}
+.btn-primary:hover::before { transform: translateX(0); }
+.btn-primary span { position: relative; z-index: 1; color: var(--black) }
+.btn-primary:hover span { color: var(--black); }
+
+.btn-ghost {
+  display: inline-block;
+  padding: 16px 32px;
+  border: 1px solid rgba(240,235,224,0.2);
+  color: rgba(240,235,224,0.5);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s;
+}
+.btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.hero-ticker {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 36px;
+  background: var(--gold);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+.ticker-inner {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 20s linear infinite;
+}
+.ticker-item {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--black);
+  font-weight: 500;
+  padding: 0 40px;
+}
+.ticker-sep {
+  color: rgba(10,8,6,0.4);
+  padding: 0 8px;
+}
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* PRODUCT SECTION */
+#product {
+  padding: 120px 40px;
+  position: relative;
+}
+
+.section-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 60px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.product-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+/* PRODUCT VISUAL */
+.product-visual {
+  position: sticky;
+  top: 100px;
+}
+
+.shirt-stage {
+  aspect-ratio: 3/4;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.shirt-bg {
+  position: absolute;
+  inset: 0;
+  transition: background 0.5s ease;
+}
+
+.shirt-graphic {
+  position: relative;
+  z-index: 2;
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+/* CSS-drawn shirt */
+.shirt-body {
+  width: 100%;
+  max-width: 320px;
+  position: relative;
+}
+
+.shirt-svg {
+  width: 100%;
+  height: auto;
+  transition: all 0.5s ease;
+  filter: drop-shadow(0 30px 60px rgba(0,0,0,0.6));
+}
+
+.shirt-label {
+  position: absolute;
+  bottom: -40px;
+  left: 0; right: 0;
+  text-align: center;
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.4);
+}
+
+/* COLOR SWATCHES */
+.color-selector {
+  margin-top: 60px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.swatch {
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  cursor: none;
+  transition: all 0.2s;
+  position: relative;
+}
+.swatch::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.swatch.active::after { border-color: var(--gold); }
+.swatch:hover { transform: scale(1.1); }
+
+.swatch-black { background: #1a1612; }
+.swatch-white { background: #f0ebe0; }
+.swatch-cream { background: #d4c9a8; }
+.swatch-orange { background: #d4570a; }
+
+.color-name {
+  margin-left: 16px;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.5);
+}
+
+/* PRODUCT INFO */
+.product-info { padding-top: 20px; }
+
+.product-tag {
+  display: inline-block;
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  border: 1px solid var(--red);
+  color: var(--red);
+  padding: 4px 12px;
+  margin-bottom: 24px;
+  animation: pulse-border 2s infinite;
+}
+@keyframes pulse-border {
+  0%, 100% { border-color: var(--red); box-shadow: 0 0 0 0 rgba(192,57,43,0); }
+  50% { border-color: var(--red-bright); box-shadow: 0 0 0 4px rgba(192,57,43,0.1); }
+}
+
+.product-name {
+  font-family: 'EDManteca', cursive;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  line-height: 0.9;
+  margin-bottom: 8px;
+}
+
+.product-subtitle {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  margin-bottom: 32px;
+}
+
+.product-desc {
+  font-size: 0.68rem;
+  line-height: 2;
+  color: rgba(240,235,224,0.55);
+  margin-bottom: 40px;
+  max-width: 440px;
+  border-left: 2px solid var(--red);
+  padding-left: 20px;
+}
+
+/* SPECS */
+.specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+.spec-item {
+  padding: 18px 20px;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.spec-item:nth-child(2n) { border-right: none; }
+.spec-item:nth-last-child(-n+2) { border-bottom: none; }
+.spec-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.35);
+  margin-bottom: 6px;
+}
+.spec-value {
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--white);
+}
+
+/* PRICE */
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3.5rem;
+  letter-spacing: 0.05em;
+  color: var(--gold);
+  line-height: 1;
+}
+.price-note {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.35);
+  line-height: 1.6;
+}
+
+/* SIZE SELECTOR */
+.size-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.35);
+  margin-bottom: 12px;
+}
+.sizes {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.size-btn {
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  background: none;
+  color: rgba(240,235,224,0.5);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  cursor: none;
+  transition: all 0.2s;
+}
+.size-btn:hover, .size-btn.active {
+  border-color: var(--gold);
+  color: var(--gold);
+  background: rgba(201,146,42,0.08);
+}
+
+/* PRE-ORDER BTN */
+.preorder-btn {
+  width: 100%;
+  padding: 20px;
+  background: var(--red);
+  border: none;
+  color: var(--white);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+  margin-bottom: 16px;
+}
+.preorder-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: translateX(-101%);
+  transition: transform 0.35s ease;
+}
+.preorder-btn:hover::before { transform: translateX(0); }
+.preorder-btn span { position: relative; z-index: 1; }
+.preorder-btn:hover span { color: var(--black); }
+
+.preorder-note {
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  color: rgba(240,235,224,0.3);
+  text-align: center;
+}
+
+/* MARQUEE DIVIDER */
+.marquee-divider {
+  padding: 20px 0;
+  background: var(--grey);
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.marquee-inner {
+  display: flex;
+  white-space: nowrap;
+  animation: ticker 25s linear infinite;
+}
+.marquee-item {
+  font-family: 'EDManteca', cursive;
+  font-size: 1.4rem;
+  color: rgba(201,146,42,0.3);
+  padding: 0 30px;
+}
+.marquee-item.lit { color: var(--gold); }
+
+/* MANIFESTO */
+#manifesto {
+  padding: 120px 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  border-top: 1px solid var(--border);
+}
+
+.manifesto-text h2 {
+  font-family: 'EDManteca', cursive;
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1;
+  margin-bottom: 32px;
+}
+.manifesto-text h2 em {
+  font-style: normal;
+  color: var(--red);
+}
+.manifesto-text p {
+  font-size: 0.7rem;
+  line-height: 2.2;
+  color: rgba(240,235,224,0.5);
+  margin-bottom: 24px;
+}
+
+.manifesto-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+.stat-block {
+  background: var(--grey);
+  padding: 36px 28px;
+  border: 1px solid var(--border);
+}
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--gold);
+  letter-spacing: 0.05em;
+}
+.stat-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.35);
+  margin-top: 8px;
+}
+
+/* FOOTER */
+footer {
+  padding: 60px 40px 40px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.footer-brand {
+  font-family: 'EDManteca', cursive;
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+}
+.footer-tagline {
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.3);
+}
+.footer-links h4 {
+  font-size: 0.58rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.footer-links ul { list-style: none; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: rgba(240,235,224,0.4);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--gold); }
+.footer-bottom {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.2);
+}
+
+/* ENTER OVERLAY */
+#enter-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+  overflow: hidden;
+}
+
+#matrix-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.18;
+  pointer-events: none;
+}
+#enter-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.overlay-logo {
+  font-family: 'EDManteca', cursive;
+  font-size: clamp(4rem, 10vw, 8rem);
+  margin-bottom: 16px;
+  animation: fade-in 1s ease forwards;
+}
+.overlay-tagline {
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.4);
+  margin-bottom: 60px;
+  animation: fade-in 1.2s ease forwards;
+}
+.enter-btn {
+  padding: 14px 48px;
+  border: 1px solid var(--gold);
+  background: none;
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  cursor: none;
+  animation: fade-in 1.4s ease forwards;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+.enter-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gold);
+  transform: translateX(-101%);
+  transition: transform 0.3s;
+}
+.enter-btn:hover::before { transform: translateX(0); }
+.enter-btn span { position: relative; z-index: 1; }
+.enter-btn:hover span { color: var(--black); }
+
+.overlay-line {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, var(--gold));
+  margin: 0 auto 30px;
+  animation: grow-line 1s 0.5s ease forwards;
+  transform-origin: top;
+  transform: scaleY(0);
+}
+@keyframes grow-line {
+  to { transform: scaleY(1); }
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* SCROLL ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  .nav-links { display: none; }
+  #hero { padding: 0 20px 70px; }
+  .product-layout { grid-template-columns: 1fr; gap: 40px; }
+  .product-visual { position: static; }
+  #manifesto { grid-template-columns: 1fr; gap: 48px; padding: 80px 20px; }
+  footer { grid-template-columns: 1fr; padding: 40px 20px; }
+  #product { padding: 80px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- ENTER OVERLAY -->
+<div id="enter-overlay">
+  <canvas id="matrix-canvas"></canvas>
+  <div class="overlay-line"></div>
+  <div class="overlay-logo" style="font-family:'EDManteca',cursive;">undici</div>
+  <div class="overlay-tagline">Ascend to the eleventh realm</div>
+  <button class="enter-btn" id="enterBtn"><span>Enter</span></button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" style="font-family:'EDManteca',cursive;font-size:1.8rem;color:var(--white);text-decoration:none;letter-spacing:0.01em;">undici</a>
+  <ul class="nav-links">
+    <li><a href="#product">The Tee</a></li>
+    <li><a href="#manifesto">Realm</a></li>
+    <li><a href="#">Lookbook</a></li>
+  </ul>
+  <a href="#product" class="nav-cta">Pre-order — $45 · Closes Mar 19</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-scanlines"></div>
+  <div class="hero-number">11</div>
+
+  <div class="hero-eyebrow">Drop 001 — Available Now</div>
+  <h1 class="hero-title">
+    <span class="glitch" data-text="undici">undici</span>
+  </h1>
+  <p class="hero-sub">240gsm heavyweight boxy tee. Eleven — beyond the limit.<br>Pre-order closes when they're gone.</p>
+  <!-- COUNTDOWN -->
+  <div class="countdown-wrap">
+    <div class="countdown-label">Pre-order closes in</div>
+    <div class="countdown-blocks">
+      <div class="countdown-block">
+        <span class="countdown-num" id="cdDays">00</span>
+        <span class="countdown-unit">Days</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-block">
+        <span class="countdown-num" id="cdHours">00</span>
+        <span class="countdown-unit">Hours</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-block">
+        <span class="countdown-num" id="cdMins">00</span>
+        <span class="countdown-unit">Mins</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-block">
+        <span class="countdown-num" id="cdSecs">00</span>
+        <span class="countdown-unit">Secs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-actions">
+    <a href="#product" class="btn-primary"><span>Pre-order — $45</span></a>
+    <a href="#manifesto" class="btn-ghost">The Realm</a>
+  </div>
+
+  <div class="hero-ticker">
+    <div class="ticker-inner">
+      <!-- doubled for seamless loop -->
+      <span class="ticker-item">undici</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Ascend to the eleventh realm</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Drop 001</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">240gsm Heavyweight</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Boxy Oversized Fit</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Four Colorways</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Pre-order $45</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">undici</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Ascend to the eleventh realm</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Drop 001</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">240gsm Heavyweight</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Boxy Oversized Fit</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Four Colorways</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Pre-order $45</span><span class="ticker-sep">✦</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- PHOTO GALLERY -->
+<div class="photo-gallery">
+  <div class="gallery-label">The Product — Up Close</div>
+  <div class="gallery-grid">
+    <div class="gallery-item gallery-wide">
+      <img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__reference-the-girl-from-creation-1-as-the-main-mod__23017_c6a4f318-718b-4dd2-bcfc-5a69a0d9829b.png?v=1772255071" alt="undici fabric detail" loading="lazy">
+      <div class="gallery-caption">Fabric & Embroidery Detail</div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/GF_reference_4.png?v=1772255032" alt="undici tee render" loading="lazy">
+      <div class="gallery-caption">The Tee</div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__make-the-main-model-be-the-girl-inthe-white-shirt-__91608.jpg?v=1772255326" alt="undici 11 detail" loading="lazy">
+      <div class="gallery-caption">11 — The Mark</div>
+    </div>
+    <div class="gallery-item gallery-tall">
+      <img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__make-the-main-model-be-the-girl-inthe-white-shirt-__91609.jpg?v=1772255326" alt="undici back shot" loading="lazy">
+      <div class="gallery-caption">Back Shot</div>
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE DIVIDER -->
+<div class="marquee-divider">
+  <div class="marquee-inner">
+    <span class="marquee-item">undici</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">ascend</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">the eleventh realm</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">drop 001</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">undici</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">ascend</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">the eleventh realm</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">drop 001</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">undici</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">ascend</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">the eleventh realm</span>
+    <span class="marquee-item lit">✦</span>
+    <span class="marquee-item">drop 001</span>
+    <span class="marquee-item lit">✦</span>
+  </div>
+</div>
+
+<!-- PRODUCT SECTION -->
+<section id="product">
+  <div class="section-label">The Drop — 001</div>
+
+  <div class="product-layout">
+    <!-- VISUAL -->
+    <div class="product-visual reveal">
+      <!-- IMAGE CAROUSEL -->
+      <div class="carousel-wrap">
+        <div class="carousel-stage" id="carouselStage">
+          <!-- Black images -->
+          <!-- Black images -->
+          <div class="carousel-slide active" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/GF_reference_4.png?v=1772255032" alt="undici black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Gf_reference_1.png?v=1772255032" alt="undici black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__reference-the-girl-from-creation-1-as-the-main-mod__23020_363a97fc-fbb1-4d9d-aaee-a1885d8bc7b2.png?v=1772255071" alt="undici black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__reference-the-girl-from-creation-1-as-the-main-mod__23017_c6a4f318-718b-4dd2-bcfc-5a69a0d9829b.png?v=1772255071" alt="undici black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__make-the-main-model-be-the-girl-inthe-white-shirt-__91609.jpg?v=1772255326" alt="undici black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__make-the-main-model-be-the-girl-inthe-white-shirt-__91608.jpg?v=1772255326" alt="undici black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/gf_ref_7_bf108b5e-3eff-4aeb-a3de-3c10251e8521.png?v=1772255071" alt="undici black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/gf_ref_5.png?v=1772255070" alt="undici black tee"></div>
+          <!-- Cream images -->
+          <div class="carousel-slide" data-color="cream"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/beige_with_hanger_mockup.png?v=1772061911" alt="undici cream tee"></div>
+          <div class="carousel-slide" data-color="cream"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Beige_shirt_2.png?v=1772062151" alt="undici cream tee"></div>
+          <!-- White images -->
+          <div class="carousel-slide" data-color="white"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/White_shirt_model.jpg?v=1772062863" alt="undici white tee"></div>
+          <!-- Orange images -->
+          <div class="carousel-slide" data-color="orange"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Orange_mockup_2_63144bc9-9005-4537-814c-9cb8cade79e0.png?v=1772061441" alt="undici orange tee"></div>
+        </div>
+
+        <!-- Prev / Next -->
+        <button class="carousel-btn carousel-prev" id="carouselPrev">&#8592;</button>
+        <button class="carousel-btn carousel-next" id="carouselNext">&#8594;</button>
+
+        <!-- Dot indicators -->
+        <div class="carousel-dots" id="carouselDots"></div>
+      </div>
+
+      <!-- COLOR SWATCHES -->
+      <div class="color-selector">
+        <div class="swatch swatch-black active" data-color="black" data-name="Void Black"></div>
+        <div class="swatch swatch-white" data-color="white" data-name="Sacred White"></div>
+        <div class="swatch swatch-cream" data-color="cream" data-name="Desert Realm"></div>
+        <div class="swatch swatch-orange" data-color="orange" data-name="Ember Ascent"></div>
+        <span class="color-name" id="colorNameDisplay">Void Black</span>
+      </div>
+    </div>
+
+    <!-- INFO -->
+    <div class="product-info reveal">
+      <div class="product-tag">Pre-order open</div>
+      <h2 class="product-name" style="font-family:'EDManteca',cursive;">undici</h2>
+      <div class="product-subtitle">The Heavyweight Boxy Tee — Drop 001</div>
+      <p class="product-desc">
+        Built from 240gsm heavyweight cotton. An oversized boxy silhouette that carries its own gravity. The undici gothic wordmark embroidered on chest. Number 11 stitched at the back collar. Four colorways. One drop. No restock.
+      </p>
+
+      <div class="specs">
+        <div class="spec-item">
+          <div class="spec-label">Weight</div>
+          <div class="spec-value">240gsm</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Fit</div>
+          <div class="spec-value">Boxy Oversized</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Material</div>
+          <div class="spec-value">100% Cotton</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Colorways</div>
+          <div class="spec-value">4 Available</div>
+        </div>
+      </div>
+
+      <div class="price-row">
+        <div class="price">$45</div>
+        <div class="price-note">
+          Pre-order price<br>Ships in 3–4 weeks<br>Closes March 19th
+        </div>
+      </div>
+
+      <div class="size-label">Select Size</div>
+      <div class="sizes">
+        <button class="size-btn">XS</button>
+        <button class="size-btn active">S</button>
+        <button class="size-btn">M</button>
+        <button class="size-btn">L</button>
+        <button class="size-btn">XL</button>
+        <button class="size-btn">XXL</button>
+      </div>
+
+      <!-- QUANTITY -->
+      <div class="size-label" style="margin-top:24px;">Quantity</div>
+      <div class="qty-row">
+        <button class="qty-btn" id="qtyMinus">−</button>
+        <span class="qty-num" id="qtyNum">1</span>
+        <button class="qty-btn" id="qtyPlus">+</button>
+      </div>
+
+      <div class="cart-actions">
+        <button class="add-to-cart-btn" id="addToCartBtn"><span>Add to Cart</span></button>
+        <a class="checkout-btn" id="shopifyBtn" href="https://undicibrand.com/products/the-undici-heavyweight-boxy-tee" target="_blank"><span>Buy Now — $45</span></a>
+      </div>
+      <div class="preorder-note">Limited quantities · No restock · Closes March 19th</div>
+
+      <!-- CART DRAWER -->
+      <div class="cart-overlay" id="cartOverlay"></div>
+      <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer-header">
+          <span class="cart-drawer-title">Your Cart</span>
+          <button class="cart-close" id="cartClose">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-drawer-footer">
+          <div class="cart-total-row">
+            <span>Total</span>
+            <span id="cartTotal">$0.00</span>
+          </div>
+          <a class="cart-checkout-btn" id="cartCheckoutBtn" href="#" target="_blank">Checkout →</a>
+          <p class="cart-note">Discount codes apply at checkout</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="manifesto-text reveal">
+    <h2>Eleven<br>is <em>beyond</em><br>the limit.</h2>
+    <p>
+      Most stop at ten. undici was built for those who don't. Each garment is a marker — a declaration that you exist in a frequency others can't reach.
+    </p>
+    <p>
+      This isn't fast fashion. This is armor. 240gsm doesn't drape. It stands. It holds shape. It remembers how you wore it.
+    </p>
+    <p style="font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color: var(--gold);">
+      — Ascend to the eleventh realm.
+    </p>
+  </div>
+
+  <div class="manifesto-stats reveal">
+    <div class="stat-block">
+      <div class="stat-num">240</div>
+      <div class="stat-label">GSM heavyweight cotton</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">04</div>
+      <div class="stat-label">Colorways this drop</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">11</div>
+      <div class="stat-label">The eleventh realm</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">01</div>
+      <div class="stat-label">Drop. No restock.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand" style="font-family:'EDManteca',cursive;font-size:2.5rem;margin-bottom:12px;">undici</div>
+    <div class="footer-tagline">Ascend to the eleventh realm</div>
+  </div>
+  <div class="footer-links">
+    <h4>Navigate</h4>
+    <ul>
+      <li><a href="#product">The Tee</a></li>
+      <li><a href="#manifesto">Manifesto</a></li>
+      <li><a href="#">Lookbook</a></li>
+      <li><a href="#">Pre-order FAQ</a></li>
+    </ul>
+  </div>
+  <div class="footer-links">
+    <h4>Connect</h4>
+    <ul>
+      <li><a href="#">Instagram</a></li>
+      <li><a href="#">TikTok</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 undici. All rights reserved.</span>
+    <span>Drop 001 — Pre-order open</span>
+  </div>
+</footer>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const cursorDot = document.getElementById('cursorDot');
+let mouseX = 0, mouseY = 0;
+let curX = 0, curY = 0;
+
+document.addEventListener('mousemove', e => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+  cursorDot.style.left = mouseX + 'px';
+  cursorDot.style.top = mouseY + 'px';
+});
+
+function animateCursor() {
+  curX += (mouseX - curX) * 0.12;
+  curY += (mouseY - curY) * 0.12;
+  cursor.style.left = curX + 'px';
+  cursor.style.top = curY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.querySelectorAll('a, button, .swatch, .size-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+});
+
+// COLOR SWATCHES (handled by carousel JS above)
+
+
+// CAROUSEL
+const colorImages = {
+  black: [...document.querySelectorAll('.carousel-slide[data-color="black"]')],
+  white: [...document.querySelectorAll('.carousel-slide[data-color="white"]')],
+  cream: [...document.querySelectorAll('.carousel-slide[data-color="cream"]')],
+  orange: [...document.querySelectorAll('.carousel-slide[data-color="orange"]')],
+};
+
+let currentColor = 'black';
+let currentIndex = 0;
+
+function getColorSlides() {
+  return colorImages[currentColor];
+}
+
+function buildDots() {
+  const dotsEl = document.getElementById('carouselDots');
+  dotsEl.innerHTML = '';
+  getColorSlides().forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'carousel-dot' + (i === currentIndex ? ' active' : '');
+    dot.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(dot);
+  });
+}
+
+function goTo(index) {
+  const slides = getColorSlides();
+  slides[currentIndex].classList.remove('active');
+  currentIndex = (index + slides.length) % slides.length;
+  slides[currentIndex].classList.add('active');
+  buildDots();
+}
+
+function switchColor(color) {
+  // Hide current
+  getColorSlides().forEach(s => s.classList.remove('active'));
+  currentColor = color;
+  currentIndex = 0;
+  getColorSlides()[0].classList.add('active');
+  buildDots();
+}
+
+document.getElementById('carouselNext').addEventListener('click', () => goTo(currentIndex + 1));
+document.getElementById('carouselPrev').addEventListener('click', () => goTo(currentIndex - 1));
+
+// Wire swatches to carousel
+document.querySelectorAll('.swatch').forEach(swatch => {
+  swatch.addEventListener('click', () => {
+    document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+    swatch.classList.add('active');
+    const color = swatch.dataset.color;
+    const name = swatch.dataset.name;
+    document.getElementById('colorNameDisplay').textContent = name;
+    switchColor(color);
+  });
+});
+
+// Init dots
+buildDots();
+
+
+// MATRIX RAIN
+(function() {
+  const canvas = document.getElementById('matrix-canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Characters — mix of gothic/latin letters, numbers, and undici 11
+  const chars = 'undici11ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ΩΨΦΣΔΛΞαβγδεζηθ∞≠≈∑∏√∫';
+
+  let cols, drops, animId;
+  const fontSize = 14;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    cols = Math.floor(canvas.width / fontSize);
+    drops = Array(cols).fill(1);
+  }
+
+  function draw() {
+    // Fade trail
+    ctx.fillStyle = 'rgba(10, 8, 6, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = 0; i < drops.length; i++) {
+      const char = chars[Math.floor(Math.random() * chars.length)];
+      const progress = drops[i] / (canvas.height / fontSize);
+
+      // Head char — bright gold/white
+      if (Math.random() > 0.95) {
+        ctx.fillStyle = '#f0ebe0';
+        ctx.font = `bold ${fontSize}px 'DM Mono', monospace`;
+      } else {
+        // Color shifts from red → gold → dim gold down the trail
+        const r = Math.floor(180 - progress * 120);
+        const g = Math.floor(progress * 100);
+        ctx.fillStyle = `rgba(${r + 40}, ${g + 80}, 20, ${0.85 - progress * 0.4})`;
+        ctx.font = `${fontSize}px 'DM Mono', monospace`;
+      }
+
+      ctx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+      // Reset drop randomly after it passes screen
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i]++;
+    }
+
+    animId = requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  draw();
+
+  // Stop matrix when entering site
+  document.getElementById('enterBtn').addEventListener('click', () => {
+    cancelAnimationFrame(animId);
+    document.getElementById('enter-overlay').classList.add('hidden');
+  });
+})();
+
+// COUNTDOWN TIMER
+(function() {
+  const now = Date.now();
+  // Target: March 19, 2026 at 23:59 local time
+  const target = new Date('2026-03-19T23:59:00').getTime();
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function flashNum(el) {
+    el.classList.add('flash');
+    setTimeout(() => el.classList.remove('flash'), 300);
+  }
+
+  let prevSecs = null;
+
+  function tick() {
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      document.querySelector('.countdown-blocks').innerHTML =
+        '<span class="countdown-expired">Pre-order Closed</span>';
+      return;
+    }
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000) / 60000);
+    const secs  = Math.floor((diff % 60000) / 1000);
+
+    document.getElementById('cdDays').textContent  = pad(days);
+    document.getElementById('cdHours').textContent = pad(hours);
+    document.getElementById('cdMins').textContent  = pad(mins);
+
+    const secsEl = document.getElementById('cdSecs');
+    if (secs !== prevSecs) {
+      secsEl.textContent = pad(secs);
+      flashNum(secsEl);
+      prevSecs = secs;
+    }
+  }
+
+  tick();
+  setInterval(tick, 1000);
+})();
+
+// VARIANT MAP — color + size → Shopify Variant ID
+const variantMap = {
+  'black':  { XS:'48308716962011', S:'48285965058267', M:'48285965189339', L:'48285965320411', XL:'48285965451483', XXL:'48285965582555' },
+  'white':  { XS:'48308716994779', S:'48285965091035', M:'48285965222107', L:'48285965353179', XL:'48285965484251', XXL:'48285965615323' },
+  'cream':  { XS:'48308717027547', S:'48285965123803', M:'48285965254875', L:'48285965385947', XL:'48285965517019', XXL:'48285965648091' },
+  'orange': { XS:'48308717060315', S:'48285965156571', M:'48285965287643', L:'48285965418715', XL:'48285965549787', XXL:'48285965680859' },
+};
+
+let qty = 1;
+let selectedColor = 'black';
+let selectedSize = 'S';
+
+const qtyNumEl = document.getElementById('qtyNum');
+const shopifyBtn = document.getElementById('shopifyBtn');
+
+function updateCheckoutLink() {
+  qtyNumEl.textContent = qty;
+  const variantId = variantMap[selectedColor]?.[selectedSize];
+  if (variantId) {
+    shopifyBtn.href = `https://undicibrand.com/cart/${variantId}:${qty}`;
+    shopifyBtn.querySelector('span').textContent = `Pre-order Now — $45`;
+    shopifyBtn.style.opacity = '1';
+    shopifyBtn.style.pointerEvents = 'auto';
+  } else {
+    shopifyBtn.href = '#';
+    shopifyBtn.querySelector('span').textContent = 'Select Size & Color';
+    shopifyBtn.style.opacity = '0.5';
+  }
+}
+
+// QUANTITY SELECTOR
+document.getElementById('qtyMinus').addEventListener('click', () => {
+  if (qty > 1) { qty--; updateCheckoutLink(); }
+});
+document.getElementById('qtyPlus').addEventListener('click', () => {
+  qty++;
+  updateCheckoutLink();
+});
+
+// Hook into carousel color switching to track selected color
+const origSwitchColor = switchColor;
+document.querySelectorAll('.swatch').forEach(swatch => {
+  swatch.addEventListener('click', () => {
+    selectedColor = swatch.dataset.color;
+    updateCheckoutLink();
+  });
+});
+
+// Add qty buttons to cursor hover effect
+document.querySelectorAll('.qty-btn').forEach(btn => {
+  btn.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+  btn.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+});
+
+// Init link
+updateCheckoutLink();
+
+// SIZE BUTTONS
+document.querySelectorAll('.size-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    selectedSize = btn.textContent.trim();
+    updateCheckoutLink();
+    btn.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+    btn.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+  });
+});
+
+// CART SYSTEM
+const cartState = [];
+const cartThumbs = {
+  black: 'https://cdn.shopify.com/s/files/1/0787/2321/9675/files/GF_reference_4.png?v=1772255032',
+  white: 'https://cdn.shopify.com/s/files/1/0787/2321/9675/files/White_shirt_model.jpg?v=1772062863',
+  cream: 'https://cdn.shopify.com/s/files/1/0787/2321/9675/files/beige_with_hanger_mockup.png?v=1772061911',
+  orange: 'https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Orange_mockup_2_63144bc9-9005-4537-814c-9cb8cade79e0.png?v=1772061441',
+};
+const colorNames = { black: 'Void Black', white: 'Sacred White', cream: 'Desert Realm', orange: 'Ember Ascent' };
+const PRICE = 45;
+
+function openCart() {
+  document.getElementById('cartDrawer').classList.add('open');
+  document.getElementById('cartOverlay').classList.add('open');
+}
+function closeCart() {
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('cartOverlay').classList.remove('open');
+}
+
+document.getElementById('cartClose').addEventListener('click', closeCart);
+document.getElementById('cartOverlay').addEventListener('click', closeCart);
+
+function buildCheckoutUrl() {
+  if (cartState.length === 0) return '#';
+  const items = cartState.map(item => `${item.variantId}:${item.qty}`).join(',');
+  return `https://undicibrand.com/cart/${items}`;
+}
+
+function renderCart() {
+  const itemsEl = document.getElementById('cartItems');
+  const totalEl = document.getElementById('cartTotal');
+  const checkoutBtn = document.getElementById('cartCheckoutBtn');
+
+  if (cartState.length === 0) {
+    itemsEl.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+    totalEl.textContent = '$0.00';
+    checkoutBtn.href = '#';
+    return;
+  }
+
+  let total = 0;
+  itemsEl.innerHTML = cartState.map((item, idx) => {
+    total += item.qty * PRICE;
+    return `
+      <div class="cart-item">
+        <img class="cart-item-img" src="${cartThumbs[item.color]}" alt="undici ${item.color} tee">
+        <div class="cart-item-info">
+          <span class="cart-item-name">undici</span>
+          <span class="cart-item-meta">${colorNames[item.color]} · ${item.size}</span>
+          <div class="cart-item-qty">
+            <button onclick="updateCartQty(${idx}, -1)">−</button>
+            <span>${item.qty}</span>
+            <button onclick="updateCartQty(${idx}, 1)">+</button>
+          </div>
+          <button class="cart-item-remove" onclick="removeCartItem(${idx})">Remove</button>
+        </div>
+        <span class="cart-item-price">$${item.qty * PRICE}</span>
+      </div>`;
+  }).join('');
+
+  totalEl.textContent = `$${total}.00`;
+  checkoutBtn.href = buildCheckoutUrl();
+}
+
+function updateCartQty(idx, delta) {
+  cartState[idx].qty += delta;
+  if (cartState[idx].qty <= 0) cartState.splice(idx, 1);
+  renderCart();
+}
+
+function removeCartItem(idx) {
+  cartState.splice(idx, 1);
+  renderCart();
+}
+
+document.getElementById('addToCartBtn').addEventListener('click', () => {
+  if (!selectedSize) { alert('Please select a size'); return; }
+  const variantId = variantMap[selectedColor]?.[selectedSize];
+  if (!variantId) return;
+
+  // Check if same item already in cart
+  const existing = cartState.find(i => i.color === selectedColor && i.size === selectedSize);
+  if (existing) {
+    existing.qty += qty;
+  } else {
+    cartState.push({ color: selectedColor, size: selectedSize, qty, variantId });
+  }
+  renderCart();
+  openCart();
+});
+
+// Init cart
+renderCart();
+
+// SCROLL REVEAL
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
