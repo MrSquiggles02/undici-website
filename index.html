@@ -1557,7 +1557,7 @@ footer {
   <div class="footer-links">
     <h4>Connect</h4>
     <ul>
-      <li><a href="#">Instagram</a></li>
+      <li><a href="https://www.instagram.com/undici_media/" target="_blank">https://www.instagram.com/undici_media/</a></li>
       <li><a href="#">TikTok</a></li>
       <li><a href="#">Contact</a></li>
     </ul>
@@ -1861,7 +1861,7 @@ document.getElementById('cartOverlay').addEventListener('click', closeCart);
 function buildCheckoutUrl() {
   if (cartState.length === 0) return '#';
   const items = cartState.map(item => `${item.variantId}:${item.qty}`).join(',');
-  return `https://undicibrand.com/cart/${items}`;
+  return `https://undicibrand.myshopify.com/cart/${items}`;
 }
 
 function renderCart() {
