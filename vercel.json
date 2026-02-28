@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/cart/:path*",
+      "destination": "https://bu4f1a-ng.myshopify.com/cart/:path*",
+      "permanent": false
+    }
+  ]
+}
