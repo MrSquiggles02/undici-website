@@ -283,12 +283,14 @@ body { cursor: none !important; }
 
 @media (max-width: 768px) {
   .photo-gallery { padding: 0 0 80px; }
-  .masonry-grid { columns: 2; }
-  .h-tall .bg-layer   { height: 50vw; }
-  .h-medium .bg-layer { height: 38vw; }
-  .h-short .bg-layer  { height: 28vw; }
-  .h-wide .bg-layer   { height: 42vw; }
-  .gallery-info-strip { flex-wrap: wrap; gap: 20px; }
+  .masonry-grid { columns: 2; column-gap: 3px; }
+  .h-tall .bg-layer   { height: 52vw; }
+  .h-medium .bg-layer { height: 40vw; }
+  .h-short .bg-layer  { height: 30vw; }
+  .h-wide .bg-layer   { height: 44vw; }
+  .gallery-info-strip { flex-wrap: wrap; gap: 20px; padding: 24px 20px; }
+  .masonry-item.featured::before { display: none; }
+  .masonry-item { margin-bottom: 3px; }
 }
 
 
@@ -1597,7 +1599,7 @@ footer {
 
       <div class="cart-actions">
         <button class="add-to-cart-btn" id="addToCartBtn"><span>Add to Cart</span></button>
-        <a class="checkout-btn" id="shopifyBtn" href="https://undicibrand.com/products/the-undici-heavyweight-boxy-tee" target="_blank"><span>Buy Now — $45</span></a>
+        <a class="checkout-btn" id="shopifyBtn" href="https://bu4f1a-ng.myshopify.com/products/the-undici-heavyweight-boxy-tee" target="_blank"><span>Buy Now — $45</span></a>
       </div>
       <div class="preorder-note">Limited quantities · No restock · Closes March 19th</div>
 
