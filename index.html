@@ -6,7 +6,6 @@
 <title>undici — ascend to the eleventh realm</title>
 <link rel="preload" href="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/ED-Manteca-Black-Regular.otf?v=1772257356" as="font" type="font/otf" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<script defer src="/_vercel/insights/script.js"></script>
 <style>
 
 /* Hide Shopify theme chrome */
@@ -136,7 +135,7 @@ body { cursor: none !important; }
 .cart-note { font-size: 0.6rem; letter-spacing: 0.15em; color: rgba(240,235,224,0.3); text-align: center; text-transform: uppercase; }
 
 .photo-gallery {
-  padding: 0 40px 120px;
+  padding: 0 0 120px;
 }
 
 .gallery-label {
@@ -145,6 +144,7 @@ body { cursor: none !important; }
   text-transform: uppercase;
   color: var(--gold);
   margin-bottom: 40px;
+  padding: 0 40px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -156,80 +156,139 @@ body { cursor: none !important; }
   background: var(--border);
 }
 
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: auto auto;
-  gap: 4px;
+/* MASONRY GRID */
+.masonry-grid {
+  columns: 3;
+  column-gap: 4px;
+  padding: 0 4px 4px;
+  width: 100%;
 }
 
-.gallery-item {
+.masonry-item {
+  break-inside: avoid;
   position: relative;
   overflow: hidden;
-  background: var(--grey);
+  margin-bottom: 4px;
+  cursor: pointer;
 }
 
-.gallery-item img {
+.masonry-item .bg-layer {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
   display: block;
-  transition: transform 0.6s ease;
-  filter: brightness(0.92);
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.82);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
 }
 
-.gallery-item:hover img {
+.masonry-item:hover .bg-layer {
   transform: scale(1.04);
   filter: brightness(1);
 }
 
-.gallery-wide {
-  grid-column: span 7;
-  aspect-ratio: 4/3;
-}
+.h-tall .bg-layer   { height: 65vh; }
+.h-medium .bg-layer { height: 45vh; }
+.h-short .bg-layer  { height: 32vh; }
+.h-wide .bg-layer   { height: 52vh; }
 
-.gallery-item:not(.gallery-wide):not(.gallery-tall) {
-  grid-column: span 5;
-  aspect-ratio: 4/3;
-}
-
-.gallery-item:nth-child(3) {
-  grid-column: span 7;
-  aspect-ratio: 16/9;
-}
-
-.gallery-tall {
-  grid-column: span 5;
-  grid-row: span 1;
-  aspect-ratio: 3/4;
-}
-
-.gallery-caption {
+.masonry-item::after {
+  content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 20px 16px 14px;
-  background: linear-gradient(to top, rgba(10,8,6,0.85) 0%, transparent 100%);
-  font-size: 0.58rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(240,235,224,0.6);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  bottom: 0; left: 0; right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+  pointer-events: none;
 }
 
-.gallery-item:hover .gallery-caption {
-  opacity: 1;
+.masonry-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.masonry-caption-title {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 1.1rem;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  line-height: 1;
+}
+
+.masonry-caption-index {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  opacity: 0.8;
+}
+
+.masonry-item.featured::before {
+  content: '';
+  position: absolute;
+  top: 16px; left: 16px;
+  width: 24px; height: 24px;
+  border-top: 1px solid var(--gold);
+  border-left: 1px solid var(--gold);
+  opacity: 0.6;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.masonry-item .hover-border {
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  transition: border-color 0.4s ease;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.masonry-item:hover .hover-border {
+  border-color: rgba(201,168,76,0.25);
+}
+
+/* Info strip */
+.gallery-info-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 40px;
+  border-top: 1px solid rgba(201,168,76,0.1);
+  margin-top: 40px;
+}
+
+.gallery-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gallery-info-value {
+  font-family: 'Bebas Neue', cursive;
+  font-size: 2rem;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.gallery-info-label {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,236,228,0.4);
 }
 
 @media (max-width: 768px) {
-  .photo-gallery { padding: 0 20px 80px; }
-  .gallery-grid { grid-template-columns: 1fr 1fr; gap: 3px; }
-  .gallery-wide, .gallery-item:not(.gallery-wide):not(.gallery-tall), .gallery-item:nth-child(3), .gallery-tall {
-    grid-column: span 1;
-    aspect-ratio: 1/1;
-  }
+  .photo-gallery { padding: 0 0 80px; }
+  .masonry-grid { columns: 2; }
+  .h-tall .bg-layer   { height: 50vw; }
+  .h-medium .bg-layer { height: 38vw; }
+  .h-short .bg-layer  { height: 28vw; }
+  .h-wide .bg-layer   { height: 42vw; }
+  .gallery-info-strip { flex-wrap: wrap; gap: 20px; }
 }
 
 
@@ -1327,24 +1386,82 @@ footer {
 
 <!-- PHOTO GALLERY -->
 <div class="photo-gallery">
-  <div class="gallery-grid">
-  <div class="gallery-item gallery-wide">
-    <img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_shoot.jpg?v=1771571955" alt="undici fabric detail" loading="lazy">
-    <div class="gallery-caption">Fabric & Embroidery Detail</div>
+  <div class="gallery-label">The Product — Up Close</div>
+  <div class="masonry-grid">
+
+    <!-- Column 1 -->
+    <div class="masonry-item h-tall featured">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_2_shoot.jpg?v=1771571955');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">Embroidery<br>Detail</div>
+        <div class="masonry-caption-index">01</div>
+      </div>
+    </div>
+    <div class="masonry-item h-short">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/11_horizontal_cropped.jpg?v=1772332375');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">11 — The Mark</div>
+        <div class="masonry-caption-index">04</div>
+      </div>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="masonry-item h-medium">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_close-up.jpg?v=1771572250');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">240gsm Fabric</div>
+        <div class="masonry-caption-index">02</div>
+      </div>
+    </div>
+    <div class="masonry-item h-tall">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_shoot.jpg?v=1771571955');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">The Tee</div>
+        <div class="masonry-caption-index">03</div>
+      </div>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="masonry-item h-wide">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_shoot.jpg?v=1771571955');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">Drop 001</div>
+        <div class="masonry-caption-index">—</div>
+      </div>
+    </div>
+    <div class="masonry-item h-medium">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/20260222_214306000_iOS.jpg?v=1772331394');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">Void Black</div>
+        <div class="masonry-caption-index">—</div>
+      </div>
+    </div>
+
   </div>
-  <div class="gallery-item">
-    <img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_2_shoot.jpg?v=1771571955" alt="undici tee render" loading="lazy">
-    <div class="gallery-caption">The Tee</div>
-  </div>
-  <div class="gallery-item">
-    <img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/11_horizontal_cropped.jpg?v=1772332375" alt="undici 11 detail" loading="lazy">
-    <div class="gallery-caption">11 — The Mark</div>
-  </div>
-  <div class="gallery-item gallery-tall">
-    <img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_close-up.jpg?v=1771572250" alt="undici back shot" loading="lazy">
-    <div class="gallery-caption">240gsm Close Up</div>
-  </div>
-</div>
+
+  <div class="gallery-info-strip">
+    <div class="gallery-info-item">
+      <div class="gallery-info-value">240</div>
+      <div class="gallery-info-label">GSM Heavyweight</div>
+    </div>
+    <div class="gallery-info-item">
+      <div class="gallery-info-value">04</div>
+      <div class="gallery-info-label">Colorways</div>
+    </div>
+    <div class="gallery-info-item">
+      <div class="gallery-info-value">11</div>
+      <div class="gallery-info-label">The Eleventh Realm</div>
+    </div>
+    <div class="gallery-info-item">
+      <div class="gallery-info-value">$45</div>
+      <div class="gallery-info-label">Pre-order Price</div>
+    </div>
   </div>
 </div>
 
@@ -1480,7 +1597,7 @@ footer {
 
       <div class="cart-actions">
         <button class="add-to-cart-btn" id="addToCartBtn"><span>Add to Cart</span></button>
-        <a class="checkout-btn" id="shopifyBtn" href="https://bu4f1a-ng.myshopify.com/products/the-undici-heavyweight-boxy-tee" target="_blank"><span>Buy Now — $45</span></a>
+        <a class="checkout-btn" id="shopifyBtn" href="https://undicibrand.com/products/the-undici-heavyweight-boxy-tee" target="_blank"><span>Buy Now — $45</span></a>
       </div>
       <div class="preorder-note">Limited quantities · No restock · Closes March 19th</div>
 
@@ -1558,7 +1675,7 @@ footer {
   <div class="footer-links">
     <h4>Connect</h4>
     <ul>
-      <li><a href="https://www.instagram.com/undici_media/" target="_blank">https://www.instagram.com/undici_media/</a></li>
+      <li><a href="#">Instagram</a></li>
       <li><a href="#">TikTok</a></li>
       <li><a href="#">Contact</a></li>
     </ul>
@@ -1786,7 +1903,7 @@ function updateCheckoutLink() {
   qtyNumEl.textContent = qty;
   const variantId = variantMap[selectedColor]?.[selectedSize];
   if (variantId) {
-    shopifyBtn.href = `https://bu4f1a-ng.myshopify.com/cart/${variantId}:${qty}`;
+    shopifyBtn.href = `https://undicibrand.com/cart/${variantId}:${qty}`;
     shopifyBtn.querySelector('span').textContent = `Pre-order Now — $45`;
     shopifyBtn.style.opacity = '1';
     shopifyBtn.style.pointerEvents = 'auto';
@@ -1862,7 +1979,7 @@ document.getElementById('cartOverlay').addEventListener('click', closeCart);
 function buildCheckoutUrl() {
   if (cartState.length === 0) return '#';
   const items = cartState.map(item => `${item.variantId}:${item.qty}`).join(',');
-  return `https://bu4f1a-ng.myshopify.com/cart/${items}`;
+  return `https://undicibrand.com/cart/${items}`;
 }
 
 function renderCart() {
