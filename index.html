@@ -1979,7 +1979,7 @@ document.getElementById('cartOverlay').addEventListener('click', closeCart);
 function buildCheckoutUrl() {
   if (cartState.length === 0) return '#';
   const items = cartState.map(item => `${item.variantId}:${item.qty}`).join(',');
-  return `https://undicibrand.com/cart/${items}`;
+  return `https://bu4f1a-ng.myshopify.com/cart/${items}`;
 }
 
 function renderCart() {
