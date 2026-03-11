@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>undici — ascend to the eleventh realm</title>
+
+  <!-- SEO -->
+  <meta name="description" content="undici Drop 001 — 240gsm heavyweight boxy tee. Four colorways. Pre-order closes March 19th.">
+  <meta name="theme-color" content="#0a0806">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="undici — ascend to the eleventh realm">
+  <meta property="og:description" content="240gsm heavyweight boxy tee. Drop 001. Pre-order closes March 19th.">
+  <meta property="og:url" content="https://www.undicibrand.com">
+  <meta property="og:type" content="website">
+
+  <!-- Vercel Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+
+  <!-- Fonts -->
+  <link rel="preload" href="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/ED-Manteca-Black-Regular.otf?v=1772257356" as="font" type="font/otf" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-dot" id="cursorDot"></div>
+
+<!-- ENTER OVERLAY -->
+<div id="enter-overlay">
+  <canvas id="matrix-canvas"></canvas>
+  <div class="overlay-line"></div>
+  <div class="overlay-logo">undici</div>
+  <div class="overlay-tagline">Ascend to the eleventh realm</div>
+  <button class="enter-btn" id="enterBtn"><span>Enter</span></button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">undici</a>
+  <ul class="nav-links">
+    <li><a href="#product">The Tee</a></li>
+    <li><a href="#manifesto">Realm</a></li>
+    <li><a href="#">Lookbook</a></li>
+  </ul>
+  <a href="#product" class="nav-cta">Pre-order — $45 · Closes Mar 19</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-scanlines"></div>
+  <div class="hero-number">11</div>
+
+  <div class="hero-eyebrow">Drop 001 — Available Now</div>
+  <h1 class="hero-title">
+    <span class="glitch" data-text="undici">undici</span>
+  </h1>
+  <p class="hero-sub">240gsm heavyweight boxy tee. Eleven — beyond the limit.<br>Pre-order closes when they're gone.</p>
+
+  <!-- COUNTDOWN -->
+  <div class="countdown-wrap">
+    <div class="countdown-label">Pre-order closes in</div>
+    <div class="countdown-blocks">
+      <div class="countdown-block">
+        <span class="countdown-num" id="cdDays">00</span>
+        <span class="countdown-unit">Days</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-block">
+        <span class="countdown-num" id="cdHours">00</span>
+        <span class="countdown-unit">Hours</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-block">
+        <span class="countdown-num" id="cdMins">00</span>
+        <span class="countdown-unit">Mins</span>
+      </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-block">
+        <span class="countdown-num" id="cdSecs">00</span>
+        <span class="countdown-unit">Secs</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-actions">
+    <a href="#product" class="btn-primary"><span>Pre-order — $45</span></a>
+    <a href="#manifesto" class="btn-ghost">The Realm</a>
+  </div>
+
+  <div class="hero-ticker">
+    <div class="ticker-inner">
+      <span class="ticker-item">undici</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Ascend to the eleventh realm</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Drop 001</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">240gsm Heavyweight</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Boxy Oversized Fit</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Four Colorways</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Pre-order $45</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">undici</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Ascend to the eleventh realm</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Drop 001</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">240gsm Heavyweight</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Boxy Oversized Fit</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Four Colorways</span><span class="ticker-sep">✦</span>
+      <span class="ticker-item">Pre-order $45</span><span class="ticker-sep">✦</span>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTO GALLERY -->
+<div class="photo-gallery">
+  <div class="gallery-label">The Product — Up Close</div>
+  <div class="masonry-grid">
+
+    <!-- Column 1 -->
+    <div class="masonry-item h-tall featured">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_2_shoot.jpg?v=1771571955');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">Embroidery<br>Detail</div>
+        <div class="masonry-caption-index">01</div>
+      </div>
+    </div>
+    <div class="masonry-item h-short">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/11_horizontal_cropped.jpg?v=1772332375');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">11 — The Mark</div>
+        <div class="masonry-caption-index">04</div>
+      </div>
+    </div>
+
+    <!-- Column 2 -->
+    <div class="masonry-item h-medium">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_close-up.jpg?v=1771572250');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">240gsm Fabric</div>
+        <div class="masonry-caption-index">02</div>
+      </div>
+    </div>
+    <div class="masonry-item h-tall">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_shoot.jpg?v=1771571955');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">The Tee</div>
+        <div class="masonry-caption-index">03</div>
+      </div>
+    </div>
+
+    <!-- Column 3 -->
+    <div class="masonry-item h-wide">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Fabric_shoot.jpg?v=1771571955');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">Drop 001</div>
+        <div class="masonry-caption-index">—</div>
+      </div>
+    </div>
+    <div class="masonry-item h-medium">
+      <div class="bg-layer" style="background-image: url('https://cdn.shopify.com/s/files/1/0787/2321/9675/files/20260222_214306000_iOS.jpg?v=1772331394');"></div>
+      <div class="hover-border"></div>
+      <div class="masonry-caption">
+        <div class="masonry-caption-title">Void Black</div>
+        <div class="masonry-caption-index">—</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="gallery-info-strip">
+    <div class="gallery-info-item">
+      <div class="gallery-info-value">240</div>
+      <div class="gallery-info-label">GSM Heavyweight</div>
+    </div>
+    <div class="gallery-info-item">
+      <div class="gallery-info-value">04</div>
+      <div class="gallery-info-label">Colorways</div>
+    </div>
+    <div class="gallery-info-item">
+      <div class="gallery-info-value">11</div>
+      <div class="gallery-info-label">The Eleventh Realm</div>
+    </div>
+    <div class="gallery-info-item">
+      <div class="gallery-info-value">$45</div>
+      <div class="gallery-info-label">Pre-order Price</div>
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE DIVIDER -->
+<div class="marquee-divider">
+  <div class="marquee-inner">
+    <span class="marquee-item">undici</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">ascend</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">the eleventh realm</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">drop 001</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">undici</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">ascend</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">the eleventh realm</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">drop 001</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">undici</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">ascend</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">the eleventh realm</span><span class="marquee-item lit">✦</span>
+    <span class="marquee-item">drop 001</span><span class="marquee-item lit">✦</span>
+  </div>
+</div>
+
+<!-- PRODUCT SECTION -->
+<section id="product">
+  <div class="section-label">The Drop — 001</div>
+
+  <div class="product-layout">
+
+    <!-- VISUAL / CAROUSEL -->
+    <div class="product-visual reveal">
+      <div class="carousel-wrap">
+        <div class="carousel-stage" id="carouselStage">
+
+          <!-- Void Black -->
+          <div class="carousel-slide active" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/GF_reference_4.png?v=1772255032" alt="undici Void Black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Gf_reference_1.png?v=1772255032" alt="undici Void Black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__reference-the-girl-from-creation-1-as-the-main-mod__23020_363a97fc-fbb1-4d9d-aaee-a1885d8bc7b2.png?v=1772255071" alt="undici Void Black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__reference-the-girl-from-creation-1-as-the-main-mod__23017_c6a4f318-718b-4dd2-bcfc-5a69a0d9829b.png?v=1772255071" alt="undici Void Black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__make-the-main-model-be-the-girl-inthe-white-shirt-__91609.jpg?v=1772255326" alt="undici Void Black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/freepik__make-the-main-model-be-the-girl-inthe-white-shirt-__91608.jpg?v=1772255326" alt="undici Void Black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/gf_ref_7_bf108b5e-3eff-4aeb-a3de-3c10251e8521.png?v=1772255071" alt="undici Void Black tee"></div>
+          <div class="carousel-slide" data-color="black"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/gf_ref_5.png?v=1772255070" alt="undici Void Black tee"></div>
+
+          <!-- Desert Realm (Cream) -->
+          <div class="carousel-slide" data-color="cream"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/beige_with_hanger_mockup.png?v=1772061911" alt="undici Desert Realm tee"></div>
+          <div class="carousel-slide" data-color="cream"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Beige_shirt_2.png?v=1772062151" alt="undici Desert Realm tee"></div>
+
+          <!-- Sacred White -->
+          <div class="carousel-slide" data-color="white"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/White_shirt_model.jpg?v=1772062863" alt="undici Sacred White tee"></div>
+
+          <!-- Ember Ascent (Orange) -->
+          <div class="carousel-slide" data-color="orange"><img src="https://cdn.shopify.com/s/files/1/0787/2321/9675/files/Orange_mockup_2_63144bc9-9005-4537-814c-9cb8cade79e0.png?v=1772061441" alt="undici Ember Ascent tee"></div>
+
+        </div>
+
+        <button class="carousel-btn carousel-prev" id="carouselPrev">&#8592;</button>
+        <button class="carousel-btn carousel-next" id="carouselNext">&#8594;</button>
+        <div class="carousel-dots" id="carouselDots"></div>
+      </div>
+
+      <!-- COLOR SWATCHES -->
+      <div class="color-selector">
+        <div class="swatch swatch-black active" data-color="black" data-name="Void Black"></div>
+        <div class="swatch swatch-white"        data-color="white"  data-name="Sacred White"></div>
+        <div class="swatch swatch-cream"        data-color="cream"  data-name="Desert Realm"></div>
+        <div class="swatch swatch-orange"       data-color="orange" data-name="Ember Ascent"></div>
+        <span class="color-name" id="colorNameDisplay">Void Black</span>
+      </div>
+    </div>
+
+    <!-- PRODUCT INFO -->
+    <div class="product-info reveal">
+      <div class="product-tag">Pre-order open</div>
+      <h2 class="product-name">undici</h2>
+      <div class="product-subtitle">The Heavyweight Boxy Tee — Drop 001</div>
+      <p class="product-desc">
+        Built from 240gsm heavyweight cotton. An oversized boxy silhouette that carries its own gravity. The undici gothic wordmark embroidered on chest. Number 11 stitched at the back collar. Four colorways. One drop. No restock.
+      </p>
+
+      <div class="specs">
+        <div class="spec-item">
+          <div class="spec-label">Weight</div>
+          <div class="spec-value">240gsm</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Fit</div>
+          <div class="spec-value">Boxy Oversized</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Material</div>
+          <div class="spec-value">100% Cotton</div>
+        </div>
+        <div class="spec-item">
+          <div class="spec-label">Colorways</div>
+          <div class="spec-value">4 Available</div>
+        </div>
+      </div>
+
+      <div class="price-row">
+        <div class="price">$45</div>
+        <div class="price-note">
+          Pre-order price<br>Ships in 3–4 weeks<br>Closes March 19th
+        </div>
+      </div>
+
+      <div class="size-label">Select Size</div>
+      <div class="sizes">
+        <button class="size-btn">XS</button>
+        <button class="size-btn active">S</button>
+        <button class="size-btn">M</button>
+        <button class="size-btn">L</button>
+        <button class="size-btn">XL</button>
+        <button class="size-btn">XXL</button>
+      </div>
+
+      <div class="size-label" style="margin-top:24px;">Quantity</div>
+      <div class="qty-row">
+        <button class="qty-btn" id="qtyMinus">−</button>
+        <span class="qty-num" id="qtyNum">1</span>
+        <button class="qty-btn" id="qtyPlus">+</button>
+      </div>
+
+      <div class="cart-actions">
+        <button class="add-to-cart-btn" id="addToCartBtn"><span>Add to Cart</span></button>
+        <a class="checkout-btn" id="shopifyBtn" href="https://bu4f1a-ng.myshopify.com/products/the-undici-heavyweight-boxy-tee" target="_blank"><span>Buy Now — $45</span></a>
+      </div>
+      <div class="preorder-note">Limited quantities · No restock · Closes March 19th</div>
+
+      <!-- CART DRAWER -->
+      <div class="cart-overlay" id="cartOverlay"></div>
+      <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-drawer-header">
+          <span class="cart-drawer-title">Your Cart</span>
+          <button class="cart-close" id="cartClose">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-drawer-footer">
+          <div class="cart-total-row">
+            <span>Total</span>
+            <span id="cartTotal">$0.00</span>
+          </div>
+          <a class="cart-checkout-btn" id="cartCheckoutBtn" href="#" target="_blank">Checkout →</a>
+          <p class="cart-note">Discount codes apply at checkout</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section id="manifesto">
+  <div class="manifesto-text reveal">
+    <h2>Eleven<br>is <em>beyond</em><br>the limit.</h2>
+    <p>Most stop at ten. undici was built for those who don't. Each garment is a marker — a declaration that you exist in a frequency others can't reach.</p>
+    <p>This isn't fast fashion. This is armor. 240gsm doesn't drape. It stands. It holds shape. It remembers how you wore it.</p>
+    <p style="font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color: var(--gold);">— Ascend to the eleventh realm.</p>
+  </div>
+
+  <div class="manifesto-stats reveal">
+    <div class="stat-block">
+      <div class="stat-num">240</div>
+      <div class="stat-label">GSM heavyweight cotton</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">04</div>
+      <div class="stat-label">Colorways this drop</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">11</div>
+      <div class="stat-label">The eleventh realm</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-num">01</div>
+      <div class="stat-label">Drop. No restock.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">undici</div>
+    <div class="footer-tagline">Ascend to the eleventh realm</div>
+  </div>
+  <div class="footer-links">
+    <h4>Navigate</h4>
+    <ul>
+      <li><a href="#product">The Tee</a></li>
+      <li><a href="#manifesto">Manifesto</a></li>
+      <li><a href="#">Lookbook</a></li>
+      <li><a href="#">Pre-order FAQ</a></li>
+    </ul>
+  </div>
+  <div class="footer-links">
+    <h4>Connect</h4>
+    <ul>
+      <li><a href="https://www.instagram.com/undici_media/" target="_blank">Instagram</a></li>
+      <li><a href="#">TikTok</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 undici. All rights reserved.</span>
+    <span>Drop 001 — Pre-order open</span>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="main.js"></script>
+
+</body>
+</html>
